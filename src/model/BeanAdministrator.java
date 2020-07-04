@@ -1,6 +1,8 @@
 package model;
 
 public class BeanAdministrator {
+	public static BeanAdministrator currentloginAdministrator = null;
+
 	private String adm_id;
 	private String adm_name;
 	private String adm_pwd;

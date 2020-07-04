@@ -14,6 +14,7 @@ public class BeanUser_info {
 	private Date usr_join;
 	private int usr_ifvip;
 	private Date usr_vipend;
+	public static BeanUser_info cunrrentBeanUser = null;
 	public String getUsr_id() {
 		return usr_id;
 	}
