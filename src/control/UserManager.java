@@ -48,4 +48,42 @@ public class UserManager implements ItfUserManager{
 		}
 		return null;
 	}
+
+	@Override
+	public BeanUser_info UserLogin(String id, String pwd) throws BaseException {
+		// TODO Auto-generated method stub\
+		BeanUser_info b = new BeanUser_info();
+		Connection conn = null;
+		
+		try {
+			String sql = "SELECT usr_id,usr_pwd FROM user_info " + 
+				"where usr_id = ?";
+			conn = DBUtil.getConnection();
+			java.sql.PreparedStatement pst = conn.prepareStatement(sql);
+			pst.setString(1, id);
+			java.sql.ResultSet rs = pst.executeQuery();
+			if(!rs.next()) throw new BusinessException("µÇÂ½ÕËºÅ²» ´æÔÚ");
+			b.setUsr_id(rs.getString(1));
+			b.setUsr_pwd(rs.getString(2));
+			if(!b.getUsr_pwd().equals(pwd)) throw new BusinessException("wrong password!");
+			
+			pst.close();
+			rs.close();
+			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		finally {
+			if(conn!=null)
+				try {
+					conn.close();
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			
+		}
+		return b;
+	}
 }

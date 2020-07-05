@@ -94,7 +94,7 @@ public class FrmUsrReg extends JFrame implements ActionListener{
 			String pwd1=new String(this.textField_1.getPassword());	
 			String pwd2 = new String(this.textField_2.getPassword());
 			try {
-				BeanUser_info.cunrrentBeanUser = TakeOututil.UserManager.UserRegister(id, pwd1, pwd2);
+				BeanUser_info.currentBeanUser = TakeOututil.UserManager.UserRegister(id, pwd1, pwd2);
 				this.setVisible(false);
 			} catch (Exception e1) {
 				JOptionPane.showMessageDialog(null, e1.getMessage(), "´íÎó",JOptionPane.ERROR_MESSAGE);

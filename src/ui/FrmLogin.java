@@ -13,6 +13,7 @@ import com.mysql.cj.x.protobuf.MysqlxNotice.Frame;
 
 import control.SystemAdminManager;
 import model.BeanAdministrator;
+import model.BeanUser_info;
 import takeoutstarter.TakeOututil;
 import util.BaseException;
 
@@ -47,6 +48,7 @@ public class FrmLogin extends JDialog implements ActionListener{
 	private JTextField edtUserId = new JTextField(20);
 	private JPasswordField edtPwd = new JPasswordField(20);
 	private FrmAdminMain dlgAdminMain = null;
+	private FrmAdminMain dlgUsrMain = null;
 	private JButton AdminReg = new JButton("\u7BA1\u7406\u5458\u6CE8\u518C");
 	
 	public FrmLogin() {
@@ -111,7 +113,21 @@ public class FrmLogin extends JDialog implements ActionListener{
 			this.setVisible(false);
 			
 		} else if (e.getSource() == this.btnUsrLogin) {
-			//System.exit(0);
+			String userid=this.edtUserId.getText();
+			String pwd=new String(this.edtPwd.getPassword());
+			try {	
+				BeanUser_info.currentBeanUser = TakeOututil.UserManager.UserLogin(userid, pwd);
+				if (BeanUser_info.currentBeanUser!=null) {
+					dlgUsrMain=new FrmAdminMain();
+					dlgUsrMain.setVisible(true);
+				this.setVisible(false);
+				}
+				
+			} catch (BaseException e1) {
+				JOptionPane.showMessageDialog(null, e1.getMessage(), "´íÎó",JOptionPane.ERROR_MESSAGE);
+				return;
+			}
+			this.setVisible(false);
 		} else if(e.getSource()==this.btnRegister){
 		FrmUsrReg dlg=new FrmUsrReg();
 		dlg.setVisible(true);
@@ -120,7 +136,7 @@ public class FrmLogin extends JDialog implements ActionListener{
 			
 		}
 	}
-
+	
 	/**
 	 * Create the frame.
 	 */
