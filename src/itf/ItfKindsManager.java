@@ -10,4 +10,5 @@ public interface ItfKindsManager {
 	public void mdfKinds(BeanBusi_kinds p) throws BaseException;
 	public void deleteKinds(BeanBusi_kinds p) throws BaseException;
 	public ArrayList<BeanBusi_kinds> loadallKinds() throws BaseException;
+	public ArrayList<BeanBusi_kinds> loadallKindsbyBusiId(String id) throws BaseException;
 }

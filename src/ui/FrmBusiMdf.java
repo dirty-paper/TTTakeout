@@ -29,7 +29,7 @@ import model.BeanBusi_info;
 import util.BaseException;
 import util.BusinessException;
 
-public class FrmBusiMdf extends JFrame implements ActionListener{
+public class FrmBusiMdf extends JDialog implements ActionListener{
 	private BeanBusi_info pub = null;
 	private JPanel toolBar = new JPanel();
 	private JPanel workPane = new JPanel();
@@ -40,8 +40,8 @@ public class FrmBusiMdf extends JFrame implements ActionListener{
 	
 	private JTextField edtName = new JTextField(20);
 	private JTextField edtLevel = new JTextField(20);
-	public FrmBusiMdf(BeanBusi_info p) {
-		super();
+	public FrmBusiMdf(JDialog f,String s,Boolean b,BeanBusi_info p) {
+		super(f,s,b);
 		this.pub=p;
 		toolBar.setLayout(new FlowLayout(FlowLayout.RIGHT));
 		toolBar.add(btnOk);
@@ -56,7 +56,6 @@ public class FrmBusiMdf extends JFrame implements ActionListener{
 		workPane.add(edtLevel);
 		this.getContentPane().add(workPane, BorderLayout.CENTER);
 		this.setSize(300, 180);
-		// 屏幕居中显示
 		double width = Toolkit.getDefaultToolkit().getScreenSize().getWidth();
 		double height = Toolkit.getDefaultToolkit().getScreenSize().getHeight();
 		this.setLocation((int) (width - this.getWidth()) / 2,

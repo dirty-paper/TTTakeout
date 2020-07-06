@@ -12,6 +12,7 @@ import java.awt.event.WindowEvent;
 import java.util.List;
 
 import javax.swing.JButton;
+import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -26,7 +27,7 @@ import model.BeanBusi_info;
 import model.BeanBusi_kinds;
 import util.BaseException;
 
-public class FrmKindsManager extends JFrame implements ActionListener{
+public class FrmKindsManager extends JDialog implements ActionListener{
 	private JPanel toolBar = new JPanel();
 	private Button btnAdd = new Button("添加类别");
 	private Button btnModify = new Button("修改类别");
@@ -55,7 +56,8 @@ public class FrmKindsManager extends JFrame implements ActionListener{
 		}
 	}
 	
-	public FrmKindsManager() {
+	public FrmKindsManager(JFrame f,String s,boolean b) {
+		super(f,s,b);
 		toolBar.setLayout(new FlowLayout(FlowLayout.LEFT));
 		toolBar.add(this.btnAdd);
 		toolBar.add(this.btnModify);
@@ -73,7 +75,7 @@ public class FrmKindsManager extends JFrame implements ActionListener{
 				(int) (height - this.getHeight()) / 2);
 
 		this.validate();
-
+		this.refresh.addActionListener(this);
 		this.btnAdd.addActionListener(this);
 		this.btnModify.addActionListener(this);
 		this.btnDelete.addActionListener(this);
@@ -87,7 +89,7 @@ public class FrmKindsManager extends JFrame implements ActionListener{
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		if (e.getSource()==this.btnAdd) {
-			FrmKindsAdd fbm = new FrmKindsAdd();
+			FrmKindsAdd fbm = new FrmKindsAdd(this,"添加类别",true);
 			fbm.setVisible(true);
 			this.reloadTable();
 		}
@@ -98,7 +100,7 @@ public class FrmKindsManager extends JFrame implements ActionListener{
 				return;
 			}
 			BeanBusi_kinds p = this.pubs.get(i);
-			FrmKindsMdf fkm = new FrmKindsMdf(p);
+			FrmKindsMdf fkm = new FrmKindsMdf(this,"修改类别",true,p);
 			fkm.setVisible(true);
 			if (fkm.getPub()!=null) {
 				this.reloadTable();
@@ -107,6 +109,7 @@ public class FrmKindsManager extends JFrame implements ActionListener{
 			
 		}
 		else if(e.getSource()==this.refresh) {
+			System.out.print("212331");
 			this.reloadTable();
 		}
 		else if (e.getSource()==this.btnDelete) {

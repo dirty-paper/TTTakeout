@@ -88,12 +88,16 @@ public class FrmAdminMain extends JFrame implements ActionListener {
 	public void actionPerformed(ActionEvent e) {
 		// TODO Auto-generated method stub
 		if (e.getSource() == this.menuItem_BusiManager) {
-			FrmBusiManager fbm = new FrmBusiManager();
+			FrmBusiManager fbm = new FrmBusiManager(this,"商户管理",true);
 			fbm.setVisible(true);
 		}
-		if(e.getSource()==this.menuItem_KindsManager) {
-			FrmKindsManager fkm = new FrmKindsManager();
+		else if(e.getSource()==this.menuItem_KindsManager) {
+			FrmKindsManager fkm = new FrmKindsManager(this,"商品类别管理",true);
 			fkm.setVisible(true);
+		}
+		else if (e.getSource()==this.menuItem_ProductManager) {
+			FrmProductManager fpm = new FrmProductManager(this, "商品管理", true);
+			fpm.setVisible(true);
 		}
 	}
 }

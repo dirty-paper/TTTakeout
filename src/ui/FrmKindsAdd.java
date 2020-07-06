@@ -6,6 +6,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
+import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -16,7 +17,7 @@ import javax.swing.border.EmptyBorder;
 import control.BusiManager;
 import control.KindsManager;
 
-public class FrmKindsAdd extends JFrame implements ActionListener{
+public class FrmKindsAdd extends JDialog implements ActionListener{
 
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
@@ -32,8 +33,8 @@ public class FrmKindsAdd extends JFrame implements ActionListener{
 	/**
 	 * Create the frame.
 	 */
-	public FrmKindsAdd() {
-		super();
+	public FrmKindsAdd(JDialog f,String s,Boolean b) {
+		super(f,s,b);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 450, 300);
 		contentPane = new JPanel();

@@ -13,6 +13,7 @@ import java.awt.event.WindowEvent;
 import java.util.List;
 
 import javax.swing.JComboBox;
+import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -29,7 +30,7 @@ import javax.swing.SwingConstants;
 
 
 
-public class FrmBusiManager extends JFrame implements ActionListener{
+public class FrmBusiManager extends JDialog implements ActionListener{
 	private JPanel toolBar = new JPanel();
 	private Button btnAdd = new Button("添加商家");
 	private Button btnModify = new Button("修改商家");
@@ -50,6 +51,7 @@ public class FrmBusiManager extends JFrame implements ActionListener{
 				tblData[i][2]=pubs.get(i).getBusi_level();
 				tblData[i][3]=pubs.get(i).getBusi_average();
 				tblData[i][4]=pubs.get(i).getBusi_perchase();
+				System.out.println(pubs.get(i).getBusi_level());
 			}
 			tablmod.setDataVector(tblData,tblTitle);
 			this.dataTable.validate();
@@ -60,17 +62,15 @@ public class FrmBusiManager extends JFrame implements ActionListener{
 		}
 	}
 	
-	public FrmBusiManager() {
+	public FrmBusiManager(Frame f,String s,boolean b) {
 		toolBar.setLayout(new FlowLayout(FlowLayout.LEFT));
 		toolBar.add(this.btnAdd);
 		toolBar.add(this.btnModify);
 		toolBar.add(this.btnDelete);
 		this.getContentPane().add(toolBar, BorderLayout.NORTH);
-		
 		toolBar.add(this.refresh);
 		this.reloadTable();
 		this.getContentPane().add(new JScrollPane(this.dataTable), BorderLayout.CENTER);
-		
 		// 灞忓箷灞呬腑鏄剧ず
 		this.setSize(842, 600);
 		double width = Toolkit.getDefaultToolkit().getScreenSize().getWidth();
@@ -79,7 +79,7 @@ public class FrmBusiManager extends JFrame implements ActionListener{
 				(int) (height - this.getHeight()) / 2);
 
 		this.validate();
-
+		this.refresh.addActionListener(this);
 		this.btnAdd.addActionListener(this);
 		this.btnModify.addActionListener(this);
 		this.btnDelete.addActionListener(this);
@@ -93,7 +93,7 @@ public class FrmBusiManager extends JFrame implements ActionListener{
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		if (e.getSource()==this.btnAdd) {
-			FrmBusiAdd fbm = new FrmBusiAdd();
+			FrmBusiAdd fbm = new FrmBusiAdd(this,"修改商家信息",true);
 			fbm.setVisible(true);
 			this.reloadTable();
 		}
@@ -104,7 +104,7 @@ public class FrmBusiManager extends JFrame implements ActionListener{
 				return;
 			}
 			BeanBusi_info p = this.pubs.get(i);
-			FrmBusiMdf ppBusiMdf = new FrmBusiMdf(p);
+			FrmBusiMdf ppBusiMdf = new FrmBusiMdf(this,"修改商家",true,p);
 			ppBusiMdf.setVisible(true);
 			if (ppBusiMdf.getPub()!=null) {
 				this.reloadTable();

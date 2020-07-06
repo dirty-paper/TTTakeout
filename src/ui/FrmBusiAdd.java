@@ -6,6 +6,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
+import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -18,7 +19,7 @@ import control.BusiManager;
 import model.BeanUser_info;
 import takeoutstarter.TakeOututil;
 
-public class FrmBusiAdd extends JFrame implements ActionListener{
+public class FrmBusiAdd extends JDialog implements ActionListener{
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
 	private JTextField textField;
@@ -32,9 +33,8 @@ public class FrmBusiAdd extends JFrame implements ActionListener{
 	/**
 	 * Create the frame.
 	 */
-	public FrmBusiAdd() {
-		super();
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+	public FrmBusiAdd(JDialog f,String s,boolean b) {
+		super(f,s,b);
 		setBounds(100, 100, 450, 300);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
