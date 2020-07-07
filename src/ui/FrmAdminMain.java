@@ -16,6 +16,7 @@ import javax.swing.border.EmptyBorder;
 
 import control.SystemAdminManager;
 import model.BeanAdministrator;
+import model.BeanUser_info;
 
 import javax.swing.JMenuBar;
 import javax.swing.JMenu;
@@ -31,9 +32,13 @@ public class FrmAdminMain extends JFrame implements ActionListener {
     private JMenuItem  menuItem_KnightrManager=new JMenuItem("骑手管理");
     private JMenuItem  menuItem_ProductManager=new JMenuItem("商品管理");
     private JMenuItem  menuItem_KindsManager=new JMenuItem("商品类别管理");
-    
-    private JMenuItem  menuItem_Buysth=new JMenuItem("购买");
-    
+    private JMenuItem  menuItem_DiscountManager = new JMenuItem("优惠券管理");
+    private JMenuItem  menuItem_FullcunManager = new JMenuItem("满减券管理");
+    private JMenuItem  menuItem_Buysth=new JMenuItem("商店");
+    private JMenuItem  menuItem_changepwd=new JMenuItem("修改密码");
+    private JMenuItem  menuItem_getDiscount=new JMenuItem("获取优惠券");
+    private JMenuItem  menuItem_getFullcut=new JMenuItem("获取满减券");
+    private JMenuItem  menuItem_shopCart=new JMenuItem("购物车");
     private JMenuItem  menuItem_UserPerchaseSearch=new JMenuItem("用户购买查询");
     private JMenuItem  menuItem_BusiSaleSearch=new JMenuItem("商家售出查询");
     private JMenuItem  menuItem_ProductSaleStatic=new JMenuItem("商品售出统计");
@@ -55,14 +60,28 @@ public class FrmAdminMain extends JFrame implements ActionListener {
 	    	menuItem_KindsManager.addActionListener(this);
 	    	menu_Manager.add(menuItem_ProductManager);
 	    	menuItem_ProductManager.addActionListener(this);
+	    	menu_Manager.add(menuItem_FullcunManager);
+	    	menuItem_FullcunManager.addActionListener(this);
+	    	menu_Manager.add(menuItem_DiscountManager);
+	    	menuItem_DiscountManager.addActionListener(this);
 	    	menu_Manager.add(menuItem_KnightrManager);
 	    	menuItem_KnightrManager.addActionListener(this);
 	    	menubar.add(menu_Manager);
 	    }
+		if(BeanUser_info.currentBeanUser!=null) {
+	    menu_Buy.add(menuItem_getDiscount);
+	    menuItem_getDiscount.addActionListener(this);
+	    menu_Buy.add(menuItem_getFullcut);
+	    menuItem_getFullcut.addActionListener(this);
+	    menu_Buy.add(menuItem_changepwd);
+	    menuItem_changepwd.addActionListener(this); 
+	    menu_Buy.add(menuItem_shopCart);
+	    menuItem_shopCart.addActionListener(this);
 	    menu_Buy.add(menuItem_Buysth);
 	    menuItem_Buysth.addActionListener(this);
 	    menubar.add(menu_Buy);
-	    menu_search.add(this.menuItem_UserPerchaseSearch);
+		} 
+		menu_search.add(this.menuItem_UserPerchaseSearch);
 	    menuItem_UserPerchaseSearch.addActionListener(this);
 	    menu_search.add(this.menuItem_BusiSaleSearch);
 	    menuItem_BusiSaleSearch.addActionListener(this);
@@ -98,6 +117,13 @@ public class FrmAdminMain extends JFrame implements ActionListener {
 		else if (e.getSource()==this.menuItem_ProductManager) {
 			FrmProductManager fpm = new FrmProductManager(this, "商品管理", true);
 			fpm.setVisible(true);
+		}
+		else if (e.getSource()==this.menuItem_DiscountManager) {
+			FrmDiscountManagerChoose fdmc = new FrmDiscountManagerChoose(this, "商家选择", true);
+			fdmc.setVisible(true);
+		}else if (e.getSource()==this.menuItem_FullcunManager) {
+			FrmFullcutManagerChoose ffmc = new FrmFullcutManagerChoose(this,"商家选择",true);
+			ffmc.setVisible(true);
 		}
 	}
 }

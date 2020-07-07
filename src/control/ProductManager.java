@@ -95,16 +95,69 @@ public class ProductManager implements ItfProductManager{
 	}
 
 	@Override
-	public void deleteProduct(BeanBusi_product p) throws BaseException {
+	public void deleteProduct(BeanForProduct p) throws BaseException {
 		// TODO Auto-generated method stub
-		
+		Connection conn = null;
+		String sql = "delete from busi_product where product_id = ?";
+		PreparedStatement pst = null;
+		try {
+			conn= DBUtil.getConnection();
+			pst = conn.prepareStatement(sql);
+			pst.setString(1, p.getProduct_id());
+			pst.execute();
+			pst.close();
+		} catch (Exception e) {
+			// TODO: handle exception
+			e.printStackTrace();
+			throw new DbException(e);
+		}finally {
+			if(conn!=null)
+				try {
+					conn.close();
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+		}
 	}
 
+
 	@Override
-	public ArrayList<BeanBusi_product> loakallproductSearch(String id) throws BaseException {
-		// TODO Auto-generated method stub
-		ArrayList<BeanBusi_product> result = new ArrayList<BeanBusi_product>();
-		return result;
+	public ArrayList<BeanForProduct> loakallproductSearch(String name) throws BaseException {
+			// TODO Auto-generated method stub
+			ArrayList<BeanForProduct> result = new ArrayList<BeanForProduct>();
+			Connection conn = null;
+			String sql = "select * from forproduct where product_name like ?";
+			PreparedStatement pst = null;
+			try {
+				conn = DBUtil.getConnection();
+				pst = conn.prepareStatement(sql);
+				pst.setString(1, "%"+name+"%");
+				ResultSet rs = pst.executeQuery();
+				while (rs.next()) {
+					BeanForProduct p = new BeanForProduct();
+					p.setProduct_id(rs.getString(1));
+					p.setProduct_name(rs.getString(3));
+					p.setKinds_name(rs.getString(2));
+					p.setBusi_name(rs.getString(4));
+					p.setProduct_remain(rs.getInt(5));
+					p.setProduct_price(rs.getDouble(6));
+					result.add(p);
+					
+				}
+			} catch (SQLException e) {
+				// TODO: handle exception
+				e.printStackTrace();
+				throw new DbException(e);
+			}finally {
+				if(conn!=null)
+					try {
+					conn.close();
+				} catch(SQLException e) {
+					e.printStackTrace();
+				}
+			}
+			return result;
 	}
 
 

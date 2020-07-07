@@ -5,7 +5,7 @@ import java.util.Date;
 public class BeanBusi_discount {
 	private String discount_id;
 	private String busi_id;
-	private int discount_value;
+	private double discount_value;
 	private int discount_collect;
 	private Date discount_begin;
 	private Date discount_end;
@@ -21,10 +21,10 @@ public class BeanBusi_discount {
 	public void setBusi_id(String busi_id) {
 		this.busi_id = busi_id;
 	}
-	public int getDiscount_value() {
+	public double getDiscount_value() {
 		return discount_value;
 	}
-	public void setDiscount_value(int discount_value) {
+	public void setDiscount_value(Double discount_value) {
 		this.discount_value = discount_value;
 	}
 	public int getDiscount_collect() {

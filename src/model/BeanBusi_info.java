@@ -6,6 +6,7 @@ public class BeanBusi_info {
 	private int busi_level;
 	private double busi_average;
 	private double busi_perchase;
+	public static BeanBusi_info currentBusiness = null;
 	public String getBusi_id() {
 		return busi_id;
 	}

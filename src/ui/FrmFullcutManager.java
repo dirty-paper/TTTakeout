@@ -2,9 +2,8 @@ package ui;
 
 import java.awt.BorderLayout;
 import java.awt.Button;
-import java.awt.EventQueue;
+import java.awt.Dialog;
 import java.awt.FlowLayout;
-import java.awt.Frame;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -12,45 +11,41 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.util.List;
 
-import javax.swing.JComboBox;
+import javax.swing.JButton;
 import javax.swing.JDialog;
-import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
-import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
-import control.BusiManager;
+
+import model.BeanBusi_discount;
+import model.BeanBusi_fullcut;
 import model.BeanBusi_info;
+import takeoutstarter.TakeOututil;
 import util.BaseException;
-import javax.swing.JButton;
-import javax.swing.SwingConstants;
 
-
-
-public class FrmBusiManager extends JDialog implements ActionListener{
+public class FrmFullcutManager extends JDialog implements ActionListener{
 	private JPanel toolBar = new JPanel();
-	private Button btnAdd = new Button("æ·»åŠ å•†å®¶");
-	private Button btnModify = new Button("ä¿®æ”¹å•†å®¶");
-	private Button btnDelete = new Button("åˆ é™¤å•†å®¶");
-	private Object tblTitle[]={"å•†å®¶id","å•†å®¶åç§°","å•†å®¶æ˜Ÿçº§","å¹³å‡ä»·æ ¼","æ€»é”€å”®é¢"};
+	private Button btnAdd = new Button("Ìí¼ÓÂú¼õÈ¯");
+	private Button btnModify = new Button("ĞŞ¸ÄÂú¼õÈ¯");
+	private Button btnDelete = new Button("É¾³ıÂú¼õÈ¯");
+	private Object tblTitle[]={"Âú¼õÈ¯id","ÉÌ¼ÒÃû³Æ","¼Û¸ñĞèÂúÖµ","ÓÅ»İÖµ","ÊÇ·ñÓÅ»İµş¼Ó"};
 	private Object tblData[][];
-	List<BeanBusi_info> pubs;
+	List<BeanBusi_fullcut> pubs;
 	DefaultTableModel tablmod=new DefaultTableModel();
 	private JTable dataTable=new JTable(tablmod);
-	private JButton refresh = new JButton("åˆ·æ–°");
-	private void reloadTable(){
+	private void reloadTable(String id){
 		try {
-			pubs=(new BusiManager()).LoadAllBusi();
+			pubs=TakeOututil.fullcutManager.loadFullcutByBusi_id(id);
 			tblData =new Object[pubs.size()][5];
 			for(int i=0;i<pubs.size();i++){
-				tblData[i][0]=pubs.get(i).getBusi_id();
-				tblData[i][1]=pubs.get(i).getBusi_name();
-				tblData[i][2]=pubs.get(i).getBusi_level();
-				tblData[i][3]=pubs.get(i).getBusi_average();
-				tblData[i][4]=pubs.get(i).getBusi_perchase();
+				tblData[i][0]=pubs.get(i).getFullcut_id();
+				tblData[i][1]=pubs.get(i).getBusi_id();
+				tblData[i][2]=pubs.get(i).getFullcut_fullvalue();
+				tblData[i][3]=pubs.get(i).getFullcut_cut();
+				tblData[i][4]=pubs.get(i).getFullcut_if();
 			}
 			tablmod.setDataVector(tblData,tblTitle);
 			this.dataTable.validate();
@@ -61,16 +56,17 @@ public class FrmBusiManager extends JDialog implements ActionListener{
 		}
 	}
 	
-	public FrmBusiManager(Frame f,String s,boolean b) {
+		public FrmFullcutManager(Dialog f,String s,boolean b,BeanBusi_info p) {
+		super(f,s,b);
+		BeanBusi_info.currentBusiness = p;
 		toolBar.setLayout(new FlowLayout(FlowLayout.LEFT));
 		toolBar.add(this.btnAdd);
 		toolBar.add(this.btnModify);
 		toolBar.add(this.btnDelete);
 		this.getContentPane().add(toolBar, BorderLayout.NORTH);
-		toolBar.add(this.refresh);
-		this.reloadTable();
+		this.reloadTable(p.getBusi_id());
 		this.getContentPane().add(new JScrollPane(this.dataTable), BorderLayout.CENTER);
-		// çå¿“ç®·çå‘¬è…‘é„å‰§ãš
+		// å±å¹•å±…ä¸­æ˜¾ç¤º
 		this.setSize(842, 600);
 		double width = Toolkit.getDefaultToolkit().getScreenSize().getWidth();
 		double height = Toolkit.getDefaultToolkit().getScreenSize().getHeight();
@@ -78,7 +74,6 @@ public class FrmBusiManager extends JDialog implements ActionListener{
 				(int) (height - this.getHeight()) / 2);
 
 		this.validate();
-		this.refresh.addActionListener(this);
 		this.btnAdd.addActionListener(this);
 		this.btnModify.addActionListener(this);
 		this.btnDelete.addActionListener(this);
@@ -88,49 +83,42 @@ public class FrmBusiManager extends JDialog implements ActionListener{
 			}
 		});
 	}
+	
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
+		// TODO Auto-generated method stub
 		if (e.getSource()==this.btnAdd) {
-			FrmBusiAdd fbm = new FrmBusiAdd(this,"ä¿®æ”¹å•†å®¶ä¿¡æ¯",true);
-			fbm.setVisible(true);
-			this.reloadTable();
+			FrmFullcutManagerAdd ffma = new FrmFullcutManagerAdd(this, "Âú¼õÈ¯Ôö¼Ó", true);
+			ffma.setVisible(true);
+			this.reloadTable(BeanBusi_info.currentBusiness.getBusi_id());
 		}
-		else if(e.getSource()==this.btnModify) {
+		else if (e.getSource()==this.btnModify) {
 			int i = this.dataTable.getSelectedRow();
 			if(i<0) {
-				JOptionPane.showMessageDialog(null,"è¯·é€‰æ‹©å•†å®¶","æç¤º",JOptionPane.ERROR_MESSAGE);
+				JOptionPane.showMessageDialog(null,"ÇëÑ¡ÔñÂú¼õÈ¯","ÌáÊ¾",JOptionPane.ERROR_MESSAGE);
 				return;
 			}
-			BeanBusi_info p = this.pubs.get(i);
-			FrmBusiMdf ppBusiMdf = new FrmBusiMdf(this,"ä¿®æ”¹å•†å®¶",true,p);
-			ppBusiMdf.setVisible(true);
-			if (ppBusiMdf.getPub()!=null) {
-				this.reloadTable();
-			}
-			this.reloadTable();
+			BeanBusi_fullcut bbd = this.pubs.get(i);
+			FrmFullcutManagerMdf ffmm = new FrmFullcutManagerMdf(this,"ÓÅ»İÈ¯±à¼­", true,bbd);
+			ffmm.setVisible(true);
+			this.reloadTable(BeanBusi_info.currentBusiness.getBusi_id());
 			
-		}
-		else if(e.getSource()==this.refresh) {
-			this.reloadTable();
 		}
 		else if (e.getSource()==this.btnDelete) {
 			int i = this.dataTable.getSelectedRow();
 			if(i<0) {
-				JOptionPane.showMessageDialog(null,"è¯·é€‰æ‹©å•†å®¶","æç¤º",JOptionPane.ERROR_MESSAGE);
+				JOptionPane.showMessageDialog(null,"ÇëÑ¡ÔñÂú¼õÈ¯","ÌáÊ¾",JOptionPane.ERROR_MESSAGE);
 				return;
 			}
-			BeanBusi_info p = this.pubs.get(i);
-			if (JOptionPane.showConfirmDialog(this,"ç¡®å®šåˆ é™¤"+p.getBusi_name()+"å—","ç¡®è®¤",JOptionPane.YES_NO_OPTION)==JOptionPane.YES_OPTION) {
-				try {
-					(new BusiManager()).deleteBusi(p);
-					this.reloadTable();
-				} catch (Exception e2) {
-					// TODO: handle exception
-					JOptionPane.showMessageDialog(null,e2.getMessage(),"é”™è¯¯",JOptionPane.ERROR_MESSAGE);
-				}
+			BeanBusi_fullcut bbd = this.pubs.get(i);
+			try {
+				TakeOututil.fullcutManager.FullcutDlt(bbd);
+				this.reloadTable(BeanBusi_info.currentBusiness.getBusi_id());
+			} catch (BaseException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
 			}
 		}
 	}
-
 }
