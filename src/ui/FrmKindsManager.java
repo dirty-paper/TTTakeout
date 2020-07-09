@@ -109,7 +109,6 @@ public class FrmKindsManager extends JDialog implements ActionListener{
 			
 		}
 		else if(e.getSource()==this.refresh) {
-			System.out.print("212331");
 			this.reloadTable();
 		}
 		else if (e.getSource()==this.btnDelete) {

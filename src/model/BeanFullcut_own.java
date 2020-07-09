@@ -3,8 +3,9 @@ package model;
 public class BeanFullcut_own {
 	private String fullcut_id;
 	private String usr_id;
-	private int rqorder;
-	private int ardorder;
+	private double needValue;
+	private double valuecut;
+	private String busi_id;
 	public String getFullcut_id() {
 		return fullcut_id;
 	}
@@ -17,17 +18,24 @@ public class BeanFullcut_own {
 	public void setUsr_id(String usr_id) {
 		this.usr_id = usr_id;
 	}
-	public int getRqorder() {
-		return rqorder;
+	public double getNeedValue() {
+		return needValue;
 	}
-	public void setRqorder(int rqorder) {
-		this.rqorder = rqorder;
+	public void setNeedValue(double needValue) {
+		this.needValue = needValue;
 	}
-	public int getArdorder() {
-		return ardorder;
+	public double getValuecut() {
+		return valuecut;
 	}
-	public void setArdorder(int ardorder) {
-		this.ardorder = ardorder;
+	public void setValuecut(double valuecut) {
+		this.valuecut = valuecut;
 	}
+	public String getBusi_id() {
+		return busi_id;
+	}
+	public void setBusi_id(String busi_id) {
+		this.busi_id = busi_id;
+	}
+	
 	
 }

@@ -91,7 +91,8 @@ public class FrmProductManagerAdd extends JDialog implements ActionListener{
 			
 		} catch (BaseException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			JOptionPane.showMessageDialog(null, e.getMessage(), "´íÎó",JOptionPane.ERROR_MESSAGE);
+			return;
 		}
 		
 		this.getContentPane().add(workPane, BorderLayout.CENTER);

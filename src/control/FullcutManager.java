@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import itf.ItfFullcutManager;
 import model.BeanBusi_discount;
 import model.BeanBusi_fullcut;
+import model.BeanFullcut_own;
 import util.BaseException;
 import util.BusinessException;
 import util.DBUtil;
@@ -151,6 +152,41 @@ public class FullcutManager implements ItfFullcutManager{
 					e.printStackTrace();
 				}
 		}
+	}
+
+	@Override
+	public ArrayList<BeanBusi_fullcut> loadFullcutAll() throws BaseException {
+		ArrayList<BeanBusi_fullcut> result = new ArrayList<BeanBusi_fullcut>();
+		Connection conn = null;
+		String sql = "select * from busi_fullcut";
+		PreparedStatement pst = null;
+		try {
+			conn = DBUtil.getConnection();
+			pst = conn.prepareStatement(sql);
+			ResultSet rs = pst.executeQuery();
+			while (rs.next()) {
+				BeanBusi_fullcut p = new BeanBusi_fullcut();
+				p.setFullcut_id(rs.getString(1));
+				p.setBusi_id(rs.getString(2));
+				p.setFullcut_fullvalue(rs.getDouble(3));
+				p.setFullcut_cut(rs.getDouble(4));
+				p.setFullcut_if(rs.getInt(5));
+				result.add(p);
+				
+			}
+		} catch (SQLException e) {
+			// TODO: handle exception
+			e.printStackTrace();
+			throw new DbException(e);
+		}finally {
+			if(conn!=null)
+				try {
+				conn.close();
+			} catch(SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		return result;
 	}
 
 }

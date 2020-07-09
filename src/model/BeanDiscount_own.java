@@ -6,8 +6,9 @@ public class BeanDiscount_own {
 	private String discount_id;
 	private String usr_id;
 	private int count;
-	private int discount_value;
+	private double discount_value;
 	private Date discount_end;
+	private String busi_id;
 	public String getDiscount_id() {
 		return discount_id;
 	}
@@ -26,10 +27,10 @@ public class BeanDiscount_own {
 	public void setCount(int count) {
 		this.count = count;
 	}
-	public int getDiscount_value() {
+	public double getDiscount_value() {
 		return discount_value;
 	}
-	public void setDiscount_value(int discount_value) {
+	public void setDiscount_value(double discount_value) {
 		this.discount_value = discount_value;
 	}
 	public Date getDiscount_end() {
@@ -37,6 +38,12 @@ public class BeanDiscount_own {
 	}
 	public void setDiscount_end(Date discount_end) {
 		this.discount_end = discount_end;
+	}
+	public String getBusi_id() {
+		return busi_id;
+	}
+	public void setBusi_id(String busi_id) {
+		this.busi_id = busi_id;
 	}
 	
 }

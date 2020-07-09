@@ -78,7 +78,7 @@ public class ProductManager implements ItfProductManager{
 				pst.setDouble(2,p.getProduct_price());
 				pst.setInt(3, p.getProduct_remain());
 				pst.setString(4, p.getProduct_id());
-				pst.execute();
+				pst.executeUpdate();
 			} catch (SQLException e) {
 				e.printStackTrace();
 				throw new DbException(e);
@@ -105,6 +105,11 @@ public class ProductManager implements ItfProductManager{
 			pst = conn.prepareStatement(sql);
 			pst.setString(1, p.getProduct_id());
 			pst.execute();
+			pst.close();
+			sql = "update busi_kinds set kinds_count = kinds_count - 1 where kinds_name = ?";
+			pst = conn.prepareStatement(sql);
+			pst.setString(1, p.getKinds_name());
+			pst.executeUpdate();
 			pst.close();
 		} catch (Exception e) {
 			// TODO: handle exception
@@ -193,6 +198,12 @@ public class ProductManager implements ItfProductManager{
 			pst.setDouble(4, b.getProduct_price());
 			pst.setInt(5, b.getProduct_remain());
 			pst.execute();
+			pst.close();
+			sql = "update busi_kinds set kinds_count = kinds_count + 1 where kinds_id = ?";
+			pst = conn.prepareStatement(sql);
+			pst.setString(1, b.getKinds_id());
+			pst.executeUpdate();
+			pst.close();
 		} catch (Exception e) {
 			// TODO: handle exception
 			e.printStackTrace();

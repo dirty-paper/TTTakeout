@@ -35,10 +35,13 @@ public class FrmAdminMain extends JFrame implements ActionListener {
     private JMenuItem  menuItem_DiscountManager = new JMenuItem("优惠券管理");
     private JMenuItem  menuItem_FullcunManager = new JMenuItem("满减券管理");
     private JMenuItem  menuItem_Buysth=new JMenuItem("商店");
-    private JMenuItem  menuItem_changepwd=new JMenuItem("修改密码");
+    private JMenuItem  menuItem_changemyself=new JMenuItem("修改个人信息");
+    private JMenuItem  menuItem_Myaddress=new JMenuItem("我的地址");
     private JMenuItem  menuItem_getDiscount=new JMenuItem("获取优惠券");
     private JMenuItem  menuItem_getFullcut=new JMenuItem("获取满减券");
     private JMenuItem  menuItem_shopCart=new JMenuItem("购物车");
+    private JMenuItem  menuItem_mydiscount=new JMenuItem("我的优惠券");
+    private JMenuItem  menuItem_myfullcut=new JMenuItem("我的满减券");
     private JMenuItem  menuItem_UserPerchaseSearch=new JMenuItem("用户购买查询");
     private JMenuItem  menuItem_BusiSaleSearch=new JMenuItem("商家售出查询");
     private JMenuItem  menuItem_ProductSaleStatic=new JMenuItem("商品售出统计");
@@ -73,12 +76,18 @@ public class FrmAdminMain extends JFrame implements ActionListener {
 	    menuItem_getDiscount.addActionListener(this);
 	    menu_Buy.add(menuItem_getFullcut);
 	    menuItem_getFullcut.addActionListener(this);
-	    menu_Buy.add(menuItem_changepwd);
-	    menuItem_changepwd.addActionListener(this); 
+	    menu_Buy.add(menuItem_changemyself);
+	    menuItem_changemyself.addActionListener(this); 
 	    menu_Buy.add(menuItem_shopCart);
 	    menuItem_shopCart.addActionListener(this);
 	    menu_Buy.add(menuItem_Buysth);
 	    menuItem_Buysth.addActionListener(this);
+	    menu_Buy.add(menuItem_mydiscount);
+	    menuItem_mydiscount.addActionListener(this);
+	    menu_Buy.add(menuItem_Myaddress);
+	    menuItem_Myaddress.addActionListener(this);
+	    menu_Buy.add(menuItem_myfullcut);
+	    menuItem_myfullcut.addActionListener(this);
 	    menubar.add(menu_Buy);
 		} 
 		menu_search.add(this.menuItem_UserPerchaseSearch);
@@ -124,6 +133,27 @@ public class FrmAdminMain extends JFrame implements ActionListener {
 		}else if (e.getSource()==this.menuItem_FullcunManager) {
 			FrmFullcutManagerChoose ffmc = new FrmFullcutManagerChoose(this,"商家选择",true);
 			ffmc.setVisible(true);
+		}else if (e.getSource()==this.menuItem_getDiscount) {
+			FrmDiscountChoose fdc = new FrmDiscountChoose(this, "优惠券选择", true);
+			fdc.setVisible(true);
+		}else if (e.getSource()==this.menuItem_getFullcut) {
+			FrmFullcutChoose fdc = new FrmFullcutChoose(this, "优惠券选择", true);
+			fdc.setVisible(true);
+		}else if (e.getSource()==this.menuItem_mydiscount) {
+			FrmMyDiscount fmd = new FrmMyDiscount(this, "我的优惠券", true);
+			fmd.setVisible(true);
+		}else if(e.getSource()==this.menuItem_myfullcut){
+			FrmMyFullcut fmf = new FrmMyFullcut(this, "我的满减券", true);
+			fmf.setVisible(true);
+		}else if (e.getSource()==this.menuItem_changemyself) {
+			FrmUsermdf fum = new FrmUsermdf(this,"修改用户",true);
+			fum.setVisible(true);
+		}else if (e.getSource() == this.menuItem_Myaddress) {
+			FrmAddressManager fam = new FrmAddressManager(this, "地址管理", true);
+			fam.setVisible(true);
+		}else if (e.getSource()==this.menuItem_KnightrManager) {
+			FrmKnightManager fkm = new FrmKnightManager(this, "骑手管理", true);
+			fkm.setVisible(true);
 		}
 	}
 }

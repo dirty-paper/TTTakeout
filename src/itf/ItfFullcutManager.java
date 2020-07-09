@@ -10,4 +10,5 @@ public interface ItfFullcutManager {
 	public void FullcutAdd(BeanBusi_fullcut p) throws BaseException;
 	public void FullcutMdf(BeanBusi_fullcut p) throws BaseException;
 	public void FullcutDlt(BeanBusi_fullcut p) throws BaseException;
+	public ArrayList<BeanBusi_fullcut> loadFullcutAll() throws BaseException;
 }

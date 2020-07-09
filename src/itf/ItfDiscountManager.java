@@ -10,4 +10,5 @@ public interface ItfDiscountManager {
 	public ArrayList<BeanBusi_discount> loadDiscount(String id) throws BaseException;
 	public void DiscountMdf(BeanBusi_discount p) throws BaseException;
 	public void DiscountAdd(BeanBusi_discount p) throws BaseException;
+	public ArrayList<BeanBusi_discount> loadDiscountall() throws BaseException;
 }

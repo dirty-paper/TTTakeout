@@ -1,6 +1,8 @@
 package control;
 
 import java.sql.Connection;
+import java.sql.Date;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import itf.ItfUserManager;
@@ -85,5 +87,102 @@ public class UserManager implements ItfUserManager{
 			
 		}
 		return b;
+	}
+
+	@Override
+	public void UserMdf(BeanUser_info p) throws BaseException {
+		// TODO Auto-generated method stub
+		Connection conn = null;
+		try {
+			String sql = "insert into user_info(add_id,usr_name,usr_gt,usr_tel,usr_eml,usr_city) values(?,?,?,?,?,?)";
+			conn = DBUtil.getConnection();
+			java.sql.PreparedStatement pst = conn.prepareStatement(sql);
+			pst.setString(1,p.getAdd_id());
+			pst.setString(2, p.getUsr_name());
+			pst.setString(3, p.getUsr_gt());
+			pst.setString(4, p.getUsr_tel());
+			pst.setString(5, p.getUsr_eml());
+			pst.setString(6, p.getUsr_city());
+			pst.execute();
+			pst.close();
+			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			throw new DbException(e);
+		}
+		finally {
+			if(conn!=null)
+				try {
+					conn.close();
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			
+		}
+	}
+
+	@Override
+	public void openVip() throws BaseException {
+		// TODO Auto-generated method stub
+		Connection conn = null;
+		try {
+			String sql = "update user_info set usr_ifvip = 1,usr_vipend = now()+2592000000L where usr_id = ?";
+			conn = DBUtil.getConnection();
+			java.sql.PreparedStatement pst = conn.prepareStatement(sql);
+			pst.setString(1, BeanUser_info.currentBeanUser.getUsr_id());
+			pst.execute();
+			pst.close();
+			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			throw new DbException(e);
+		}
+		finally {
+			if(conn!=null)
+				try {
+					conn.close();
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			
+		}
+	}
+
+	@Override
+	public Date returnendDate() throws BaseException {
+		// TODO Auto-generated method stub
+		Connection conn = null;
+		Date ddd = null;
+		try {
+			String sql = "select usr_vipend from user_info where usr_id = ?";
+			conn = DBUtil.getConnection();
+			java.sql.PreparedStatement pst = conn.prepareStatement(sql);
+			pst.setString(1, BeanUser_info.currentBeanUser.getUsr_id());
+			ResultSet rs = pst.executeQuery();
+			while (rs.next()) {
+				ddd = rs.getDate(1);
+			}
+			pst.close();
+			rs.close();	
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			throw new DbException(e);
+		}
+		finally {
+			if(conn!=null)
+				try {
+					conn.close();
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			
+		}
+		return ddd;
 	}
 }

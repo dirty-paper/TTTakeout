@@ -15,7 +15,6 @@ import util.DBUtil;
 import util.DbException;
 
 public class BusiManager implements ItfBusiManager{
-
 	@Override
 	public List<BeanBusi_info> LoadAllBusi() throws BaseException {
 		List<BeanBusi_info> result = new ArrayList<BeanBusi_info>();
@@ -136,10 +135,17 @@ public class BusiManager implements ItfBusiManager{
 	public void deleteBusi(BeanBusi_info busi) throws BaseException {
 		// TODO Auto-generated method stub
 		Connection conn = null;
-		String sql = "delete from busi_info where busi_id = ?";
+		String sql = "select * from busi_kinds where busi_id = ?";
 		PreparedStatement pst = null;
 		try {
 			conn= DBUtil.getConnection();
+			pst = conn.prepareStatement(sql);
+			pst.setString(1, busi.getBusi_id());
+			java.sql.ResultSet rs = pst.executeQuery();
+			if(rs.next()) throw new BusinessException("该商户已存在类别,不能删除");
+			rs.close();
+			pst.close();
+			sql = "delete from busi_info where busi_id = ?";
 			pst = conn.prepareStatement(sql);
 			pst.setString(1, busi.getBusi_id());
 			pst.execute();

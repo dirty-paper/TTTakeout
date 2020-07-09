@@ -103,7 +103,8 @@ public class FrmFullcutManagerAdd extends JDialog implements ActionListener{
 				this.setVisible(false);
 			} catch (BaseException e1) {
 				// TODO Auto-generated catch block
-				e1.printStackTrace();
+				JOptionPane.showMessageDialog(null, e1.getMessage(), "´íÎó",JOptionPane.ERROR_MESSAGE);
+				return;
 			}
 		}else if (e.getSource() == this.cancel) {
 			this.setVisible(false);

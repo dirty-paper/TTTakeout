@@ -156,4 +156,39 @@ public class DiscountManager implements ItfDiscountManager{
 		}
 	}
 
+	@Override
+	public ArrayList<BeanBusi_discount> loadDiscountall() throws BaseException {
+		ArrayList<BeanBusi_discount> result = new ArrayList<BeanBusi_discount>();
+		Connection conn = null;
+		String sql = "select * from busi_discount";
+		PreparedStatement pst = null;
+		try {
+			conn = DBUtil.getConnection();
+			pst = conn.prepareStatement(sql);
+			ResultSet rs = pst.executeQuery();
+			while (rs.next()) {
+				BeanBusi_discount p= new BeanBusi_discount();
+				p.setDiscount_id(rs.getString(1));
+				p.setBusi_id(rs.getString(2));
+				p.setDiscount_value(rs.getDouble(3));
+				p.setDiscount_collect(rs.getInt(4));
+				p.setDiscount_end(rs.getDate(6));
+				result.add(p);
+				
+			}
+		} catch (SQLException e) {
+			// TODO: handle exception
+			e.printStackTrace();
+			throw new DbException(e);
+		}finally {
+			if(conn!=null)
+				try {
+				conn.close();
+			} catch(SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		return result;
+	}
+
 }
