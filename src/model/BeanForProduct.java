@@ -7,6 +7,8 @@ public class BeanForProduct {
 	private String kinds_name;
 	private int product_remain;
 	private double product_price;
+	private String busi_id;
+	private String kinds_id;
 	public String getProduct_id() {
 		return product_id;
 	}
@@ -42,6 +44,18 @@ public class BeanForProduct {
 	}
 	public void setKinds_name(String kinds_name) {
 		this.kinds_name = kinds_name;
+	}
+	public String getBusi_id() {
+		return busi_id;
+	}
+	public void setBusi_id(String busi_id) {
+		this.busi_id = busi_id;
+	}
+	public String getKinds_id() {
+		return kinds_id;
+	}
+	public void setKinds_id(String kinds_id) {
+		this.kinds_id = kinds_id;
 	}
 	
 }

@@ -154,6 +154,12 @@ public class FrmAdminMain extends JFrame implements ActionListener {
 		}else if (e.getSource()==this.menuItem_KnightrManager) {
 			FrmKnightManager fkm = new FrmKnightManager(this, "骑手管理", true);
 			fkm.setVisible(true);
+		}else if (e.getSource()== this.menuItem_Buysth) {
+			FrmChooseBusi fpma = new FrmChooseBusi(this, "请选择商家", true);
+			fpma.setVisible(true);
+		}else if (e.getSource()==this.menuItem_shopCart) {
+			FrmShoppingCartManager fscm = new FrmShoppingCartManager(this, "我的购物车", true);
+			fscm.setVisible(true);
 		}
 	}
 }

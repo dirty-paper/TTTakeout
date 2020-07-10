@@ -3,9 +3,9 @@ package util;
 import java.sql.Connection;
 
 public class DBUtil {
-	private static final String jdbcUrl="jdbc:mysql://:3306/takeout";
+	private static final String jdbcUrl="jdbc:mysql://39.107.246.161:3306/takeout";
 	private static final String dbUser="root";
-	private static final String dbPwd="";
+	private static final String dbPwd="abc123321";
 	static{
 		try {
 			Class.forName("com.mysql.cj.jdbc.Driver");

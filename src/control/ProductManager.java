@@ -16,7 +16,45 @@ import util.DBUtil;
 import util.DbException;
 
 public class ProductManager implements ItfProductManager{
-
+	@Override
+	public ArrayList<BeanForProduct> loadproductforonebusi(String id) throws BaseException {
+		// TODO Auto-generated method stub
+		ArrayList<BeanForProduct> result = new ArrayList<BeanForProduct>();
+		Connection conn = null;
+		String sql = "select * from forproduct where busi_id = ?";
+		PreparedStatement pst = null;
+		try {
+			conn = DBUtil.getConnection();
+			pst = conn.prepareStatement(sql);
+			pst.setString(1, id);
+			ResultSet rs = pst.executeQuery();
+			while (rs.next()) {
+				BeanForProduct p = new BeanForProduct();
+				p.setBusi_id(id);
+				p.setProduct_id(rs.getString(2));
+				p.setKinds_name(rs.getString(3));
+				p.setProduct_name(rs.getString(4));
+				p.setBusi_name(rs.getString(5));
+				p.setProduct_remain(rs.getInt(6));
+				p.setProduct_price(rs.getDouble(7));
+				p.setKinds_id(rs.getString(8));
+				result.add(p);
+				
+			}
+		} catch (SQLException e) {
+			// TODO: handle exception
+			e.printStackTrace();
+			throw new DbException(e);
+		}finally {
+			if(conn!=null)
+				try {
+				conn.close();
+			} catch(SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		return result;
+	}
 	@Override
 	public ArrayList<BeanForProduct> loakallproduct() throws BaseException {
 		// TODO Auto-generated method stub
@@ -30,12 +68,14 @@ public class ProductManager implements ItfProductManager{
 			ResultSet rs = pst.executeQuery();
 			while (rs.next()) {
 				BeanForProduct p = new BeanForProduct();
-				p.setProduct_id(rs.getString(1));
-				p.setProduct_name(rs.getString(3));
-				p.setKinds_name(rs.getString(2));
-				p.setBusi_name(rs.getString(4));
-				p.setProduct_remain(rs.getInt(5));
-				p.setProduct_price(rs.getDouble(6));
+				p.setBusi_id(rs.getString(1));
+				p.setProduct_id(rs.getString(2));
+				p.setKinds_name(rs.getString(3));
+				p.setProduct_name(rs.getString(4));
+				p.setBusi_name(rs.getString(5));
+				p.setProduct_remain(rs.getInt(6));
+				p.setProduct_price(rs.getDouble(7));
+				p.setKinds_id(rs.getString(8));
 				result.add(p);
 				
 			}
@@ -141,12 +181,14 @@ public class ProductManager implements ItfProductManager{
 				ResultSet rs = pst.executeQuery();
 				while (rs.next()) {
 					BeanForProduct p = new BeanForProduct();
-					p.setProduct_id(rs.getString(1));
-					p.setProduct_name(rs.getString(3));
-					p.setKinds_name(rs.getString(2));
-					p.setBusi_name(rs.getString(4));
-					p.setProduct_remain(rs.getInt(5));
-					p.setProduct_price(rs.getDouble(6));
+					p.setBusi_id(rs.getString(1));
+					p.setProduct_id(rs.getString(2));
+					p.setKinds_name(rs.getString(3));
+					p.setProduct_name(rs.getString(4));
+					p.setBusi_name(rs.getString(5));
+					p.setProduct_remain(rs.getInt(6));
+					p.setProduct_price(rs.getDouble(7));
+					p.setKinds_id(rs.getString(8));
 					result.add(p);
 					
 				}
@@ -219,5 +261,9 @@ public class ProductManager implements ItfProductManager{
 			
 		}
 	}
+
+
+
+	
 
 }

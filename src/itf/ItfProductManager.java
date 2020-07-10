@@ -12,4 +12,5 @@ public interface ItfProductManager {
 	public void ProductMdf(BeanForProduct p) throws BaseException;
 	public void deleteProduct(BeanForProduct p) throws BaseException;
 	public ArrayList<BeanForProduct> loakallproductSearch(String name) throws BaseException;
+	public ArrayList<BeanForProduct> loadproductforonebusi(String id) throws BaseException;
 }
