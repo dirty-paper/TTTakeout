@@ -14,11 +14,13 @@ import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
 import control.BusiManager;
 import model.BeanBusi_info;
+import takeoutstarter.TakeOututil;
 import util.BaseException;
 
 public class FrmChooseBusi extends JDialog implements ActionListener{
@@ -72,6 +74,13 @@ public class FrmChooseBusi extends JDialog implements ActionListener{
 			if(this.cmbbusi.getSelectedIndex()>0) {
 				BeanBusi_info p= new BeanBusi_info();
 				p = this.busimap_name.get(this.cmbbusi.getSelectedItem().toString());
+				try {
+					TakeOututil.shoppingCartManager.checkifother(p);
+				} catch (BaseException e1) {
+					// TODO Auto-generated catch block
+					JOptionPane.showMessageDialog(null, e1.getMessage(), "¥ÌŒÛ",JOptionPane.ERROR_MESSAGE);
+					return;
+				}
 				FrmProductForUser fpfu = new FrmProductForUser(this, "…Ã∆∑—°π∫", true, p);
 				fpfu.setVisible(true);
 			}

@@ -8,6 +8,7 @@ import control.FullcutManager;
 import control.FullcutOwn;
 import control.KindsManager;
 import control.KnightManager;
+import control.OrderManager;
 import control.ProductManager;
 import control.ShoppingCartManager;
 import control.SystemAdminManager;
@@ -20,6 +21,7 @@ import itf.ItfFullcutManager;
 import itf.ItfFullcut_own;
 import itf.ItfKindsManager;
 import itf.ItfKnightManager;
+import itf.ItfOrderManager;
 import itf.ItfProductManager;
 import itf.ItfShoppingCartManager;
 import itf.ItfSystemAdmin;
@@ -38,4 +40,5 @@ public class TakeOututil {
 	public static ItfAddressManager addressManager = new AddressManager();
 	public static ItfKnightManager knightManager = new KnightManager();
 	public static ItfShoppingCartManager shoppingCartManager =new ShoppingCartManager();
+	public static ItfOrderManager orderManager = new OrderManager();
 }

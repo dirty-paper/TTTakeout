@@ -21,7 +21,7 @@ public class ProductManager implements ItfProductManager{
 		// TODO Auto-generated method stub
 		ArrayList<BeanForProduct> result = new ArrayList<BeanForProduct>();
 		Connection conn = null;
-		String sql = "select * from forproduct where busi_id = ?";
+		String sql = "select * from forproduct where busi_id = ? and product_rmtime is null";
 		PreparedStatement pst = null;
 		try {
 			conn = DBUtil.getConnection();
@@ -60,7 +60,7 @@ public class ProductManager implements ItfProductManager{
 		// TODO Auto-generated method stub
 		ArrayList<BeanForProduct> result = new ArrayList<BeanForProduct>();
 		Connection conn = null;
-		String sql = "select * from forproduct";
+		String sql = "select * from forproduct where product_rmtime is null";
 		PreparedStatement pst = null;
 		try {
 			conn = DBUtil.getConnection();
@@ -138,13 +138,13 @@ public class ProductManager implements ItfProductManager{
 	public void deleteProduct(BeanForProduct p) throws BaseException {
 		// TODO Auto-generated method stub
 		Connection conn = null;
-		String sql = "delete from busi_product where product_id = ?";
+		String sql = "update busi_product set product_rmtime = now() where product_id = ?";
 		PreparedStatement pst = null;
 		try {
 			conn= DBUtil.getConnection();
 			pst = conn.prepareStatement(sql);
 			pst.setString(1, p.getProduct_id());
-			pst.execute();
+			pst.executeUpdate();
 			pst.close();
 			sql = "update busi_kinds set kinds_count = kinds_count - 1 where kinds_name = ?";
 			pst = conn.prepareStatement(sql);
@@ -172,7 +172,7 @@ public class ProductManager implements ItfProductManager{
 			// TODO Auto-generated method stub
 			ArrayList<BeanForProduct> result = new ArrayList<BeanForProduct>();
 			Connection conn = null;
-			String sql = "select * from forproduct where product_name like ?";
+			String sql = "select * from forproduct where product_name like ? and product_rmtime is null";
 			PreparedStatement pst = null;
 			try {
 				conn = DBUtil.getConnection();
@@ -221,7 +221,7 @@ public class ProductManager implements ItfProductManager{
 		if (b.getProduct_remain()<0) throw new BusinessException("库存不能为负噢~");
 		Connection conn = null;
 		PreparedStatement pst = null;
-		String sql = "select * from busi_product where product_id = ?";
+		String sql = "select * from busi_product where product_id = ? and product_rmtime is null";
 		try {
 			conn = DBUtil.getConnection();
 			pst = conn.prepareStatement(sql);

@@ -25,7 +25,7 @@ public class FullcutOwn implements ItfFullcut_own{
 		// TODO Auto-generated method stub
 			Connection conn = null;
 			PreparedStatement pst = null;
-			String sql = "select * from fullcut_own where fullcut_id = ? and usr_id = ?"; 
+			String sql = "select * from fullcut_own where fullcut_id = ? and usr_id = ? and ifused = 0"; 
 			try {
 				conn = DBUtil.getConnection();
 				pst = conn.prepareStatement(sql);
@@ -60,11 +60,11 @@ public class FullcutOwn implements ItfFullcut_own{
 	}
 
 	@Override
-	public ArrayList<BeanFullcut_own> loadfullcutmine() throws DbException {
+	public ArrayList<BeanFullcut_own> loadfullcutmine() throws BaseException {
 		// TODO Auto-generated method stub
 		ArrayList<BeanFullcut_own> result = new ArrayList<BeanFullcut_own>();
 		Connection conn = null;
-		String sql = "select * from fullcut_own where usr_id = ?";
+		String sql = "select * from fullcut_own where usr_id = ? and ifused = 0";
 		PreparedStatement pst = null;
 		try {
 			conn = DBUtil.getConnection();
@@ -94,6 +94,33 @@ public class FullcutOwn implements ItfFullcut_own{
 			}
 		}
 		return result;
+	}
+
+	@Override
+	public void usefullcut(BeanFullcut_own p) throws BaseException {
+		// TODO Auto-generated method stub
+		Connection conn = null;
+		PreparedStatement pst = null;
+		String sql = "update fullcut_own set ifused = 1 where fullcut_id = ? and usr_id = ?";
+		try {
+			conn = DBUtil.getConnection();
+			pst = conn.prepareStatement(sql);
+			pst.setString(1, p.getFullcut_id());
+			pst.setString(2, BeanUser_info.currentBeanUser.getUsr_id());
+			pst.executeUpdate();
+			pst.close();
+		} catch (SQLException e) {
+			// TODO: handle exception
+			e.printStackTrace();
+			throw new DbException(e);
+		}finally {
+			if(conn!=null)
+				try {
+				conn.close();
+			} catch(SQLException e) {
+				e.printStackTrace();
+			}
+		}
 	}
 
 }

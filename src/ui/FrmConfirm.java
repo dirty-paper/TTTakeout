@@ -11,6 +11,7 @@ import javax.swing.JDialog;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
+import model.BeanDiscount_own;
 import model.BeanFullcut_own;
 import model.BeanShoppingCart;
 import model.BeanUser_address;
@@ -18,6 +19,7 @@ import takeoutstarter.TakeOututil;
 import util.BaseException;
 
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 
 public class FrmConfirm extends JDialog implements ActionListener{
@@ -32,7 +34,12 @@ public class FrmConfirm extends JDialog implements ActionListener{
 	private JLabel lblafter = new JLabel("New label");
 	private JButton okButton = new JButton("OK");
 	private JButton cancelButton = new JButton("Cancel");
-	
+	BeanDiscount_own bd = null;
+	double total=0;
+	double discount=0;
+	double fullcut=0;
+	double after = 0;
+	BeanFullcut_own fuc=null;
 	public FrmConfirm(JDialog f,String s,boolean b,BeanUser_address aa,ArrayList<BeanShoppingCart> p) {
 		super(f,s,b);
 		setBounds(100, 100, 450, 300);
@@ -44,17 +51,17 @@ public class FrmConfirm extends JDialog implements ActionListener{
 		contentPanel.setLayout(null);
 		{
 			
-			lbltotal.setBounds(141, 10, 106, 15);
+			lbltotal.setBounds(86, 10, 161, 15);
 			contentPanel.add(lbltotal);
 		}
 		{
 			
-			lbdiscount.setBounds(141, 59, 106, 15);
+			lbdiscount.setBounds(81, 59, 272, 15);
 			contentPanel.add(lbdiscount);
 		}
 		{
 			
-			lblfullcut.setBounds(141, 110, 106, 15);
+			lblfullcut.setBounds(81, 110, 272, 15);
 			contentPanel.add(lblfullcut);
 		}
 		{	
@@ -70,7 +77,7 @@ public class FrmConfirm extends JDialog implements ActionListener{
 		}
 		{
 			
-			lblafter.setBounds(341, 191, 58, 15);
+			lblafter.setBounds(293, 191, 106, 15);
 			contentPanel.add(lblafter);
 		}
 		{
@@ -91,25 +98,32 @@ public class FrmConfirm extends JDialog implements ActionListener{
 		}
 		this.okButton.addActionListener(this);
 		this.cancelButton.addActionListener(this);
-		double fullcut=0;
+	
 		try {
-			double total = TakeOututil.shoppingCartManager.gettotal(p);
-			this.lbltotal.setText(String.valueOf(total));
-			double discount = 0;
-			//这里还要添加优惠券
-			//
-			//
-			//这里还要添加优惠券
-			
-			BeanFullcut_own fuc = TakeOututil.shoppingCartManager.getFullcut(total);
-			if (fuc!=null) {
-				fullcut = fuc.getValuecut();
-				this.lblfullcut.setText("使用了满减券"+fuc.getFullcut_id()+"号优惠了"+String.valueOf(fuc.getValuecut())+"元");
+			this.total = TakeOututil.shoppingCartManager.gettotal(p);
+			this.lbltotal.setText("原价："+String.valueOf(total)+"元");
+			this.bd = TakeOututil.shoppingCartManager.getDiscount(this.total, this.p);
+			if (bd!=null) {
+				this.discount = bd.getDiscount_value();
+				this.lbdiscount.setText("使用了优惠券"+this.bd.getDiscount_id()+"号优惠了"+String.valueOf(this.bd.getDiscount_value())+"元");
 			}else {
-				fullcut = 0;
+				this.discount=0;
+				this.lbdiscount.setText("无可用优惠券");
+			}
+		
+			this.fuc = TakeOututil.shoppingCartManager.getFullcut(this.total);
+			if (fuc!=null) {
+				this.fullcut = this.fuc.getValuecut();
+				this.lblfullcut.setText("使用了满减券"+this.fuc.getFullcut_id()+"号优惠了"+String.valueOf(this.fuc.getValuecut())+"元");
+			}else {
+				this.fullcut = 0;
 				this.lblfullcut.setText("无可用满减券");
 			}
-			this.lblafter.setText("合计："+String.valueOf(total-fullcut-discount));
+			this.after = this.total-this.fullcut-this.discount;
+			if (this.after < 0) {
+				this.after = 0;
+			}
+			this.lblafter.setText("合计："+String.valueOf(this.after));
 		} catch (BaseException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
@@ -120,7 +134,25 @@ public class FrmConfirm extends JDialog implements ActionListener{
 	public void actionPerformed(ActionEvent e) {
 		// TODO Auto-generated method stub
 		if (e.getSource()==this.okButton) {
-			
+			String rqtime = this.edtTime.getText();
+			try {
+				TakeOututil.shoppingCartManager.settle(p, aa, bd, fuc, total, after, rqtime);
+				if(bd!=null) {
+					TakeOututil.discount_own.usediscount(bd);
+				}
+				if (fuc!=null) {
+					TakeOututil.fullcut_own.usefullcut(fuc);
+				}
+				Frmfucked ff = new Frmfucked(this, "下单成功提醒", true);
+				ff.setVisible(true);
+				this.setVisible(false);
+			} catch (BaseException e1) {
+				// TODO Auto-generated catch block
+				JOptionPane.showMessageDialog(null, e1.getMessage(), "错误",JOptionPane.ERROR_MESSAGE);
+				return;
+			}
+		}else if (e.getSource()==this.cancelButton) {
+			this.setVisible(false);
 		}
 	}
 

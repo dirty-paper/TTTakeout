@@ -98,7 +98,7 @@ public class KindsManager implements ItfKindsManager{
 	public void deleteKinds(BeanBusi_kinds p) throws BaseException {
 		// TODO Auto-generated method stub
 		Connection conn = null;
-		String sql = "select * from busi_product where kinds_id = ?";
+		String sql = "select * from busi_product where kinds_id = ? and product_rmtime is null";
 		PreparedStatement pst = null;
 		try {
 			conn= DBUtil.getConnection();
@@ -110,10 +110,10 @@ public class KindsManager implements ItfKindsManager{
 			}
 			rs.close();
 			pst.close();
-			sql = "delete from busi_kind where kinds_id = ?";
+			sql = "update busi_kinds set kinds_rmtime = now() where kinds_id = ?";
 			pst = conn.prepareStatement(sql);
 			pst.setString(1, p.getKinds_id());
-			pst.execute();
+			pst.executeUpdate();
 			pst.close();
 		} catch (Exception e) {
 			// TODO: handle exception
@@ -136,7 +136,7 @@ public class KindsManager implements ItfKindsManager{
 			ArrayList<BeanBusi_kinds> result = new ArrayList<BeanBusi_kinds>();
 
 			Connection conn = null;
-			String sql = "select * from busi_kinds";
+			String sql = "select * from busi_kinds where kinds_rmtime is null";
 			PreparedStatement pst = null;
 			try {
 				conn = DBUtil.getConnection();
@@ -170,7 +170,7 @@ public class KindsManager implements ItfKindsManager{
 	public ArrayList<BeanBusi_kinds> loadallKindsbyBusiId(String id) throws BaseException {
 		ArrayList<BeanBusi_kinds> result = new ArrayList<BeanBusi_kinds>();
 		Connection conn = null;
-		String sql = "select * from busi_kinds where busi_id = ?";
+		String sql = "select * from busi_kinds where busi_id = ? and kinds_rmtime is null";
 		PreparedStatement pst = null;
 		try {
 			conn = DBUtil.getConnection();

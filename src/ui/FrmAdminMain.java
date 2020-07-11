@@ -34,6 +34,7 @@ public class FrmAdminMain extends JFrame implements ActionListener {
     private JMenuItem  menuItem_KindsManager=new JMenuItem("商品类别管理");
     private JMenuItem  menuItem_DiscountManager = new JMenuItem("优惠券管理");
     private JMenuItem  menuItem_FullcunManager = new JMenuItem("满减券管理");
+    private JMenuItem  menuItem_KnightDistribute = new JMenuItem("分配订单于骑手");
     private JMenuItem  menuItem_Buysth=new JMenuItem("商店");
     private JMenuItem  menuItem_changemyself=new JMenuItem("修改个人信息");
     private JMenuItem  menuItem_Myaddress=new JMenuItem("我的地址");
@@ -42,6 +43,7 @@ public class FrmAdminMain extends JFrame implements ActionListener {
     private JMenuItem  menuItem_shopCart=new JMenuItem("购物车");
     private JMenuItem  menuItem_mydiscount=new JMenuItem("我的优惠券");
     private JMenuItem  menuItem_myfullcut=new JMenuItem("我的满减券");
+    private JMenuItem  menuItem_myorder=new JMenuItem("我的订单");
     private JMenuItem  menuItem_UserPerchaseSearch=new JMenuItem("用户购买查询");
     private JMenuItem  menuItem_BusiSaleSearch=new JMenuItem("商家售出查询");
     private JMenuItem  menuItem_ProductSaleStatic=new JMenuItem("商品售出统计");
@@ -52,7 +54,7 @@ public class FrmAdminMain extends JFrame implements ActionListener {
 	private JPanel statusBar = new JPanel();
 	public FrmAdminMain(){
 		this.setExtendedState(Frame.MAXIMIZED_BOTH);
-		this.setTitle("外卖管理系统");
+		this.setTitle("外卖服务系统");
 		if(BeanAdministrator.currentloginAdministrator!=null)
 	    if("管理员".equals(BeanAdministrator.currentloginAdministrator.getAdm_name())){
 	    	menu_Manager.add(menuItem_UserManager);
@@ -69,6 +71,8 @@ public class FrmAdminMain extends JFrame implements ActionListener {
 	    	menuItem_DiscountManager.addActionListener(this);
 	    	menu_Manager.add(menuItem_KnightrManager);
 	    	menuItem_KnightrManager.addActionListener(this);
+	    	menu_Manager.add(menuItem_KnightDistribute);
+	    	menuItem_KnightDistribute.addActionListener(this);
 	    	menubar.add(menu_Manager);
 	    }
 		if(BeanUser_info.currentBeanUser!=null) {
@@ -82,12 +86,14 @@ public class FrmAdminMain extends JFrame implements ActionListener {
 	    menuItem_shopCart.addActionListener(this);
 	    menu_Buy.add(menuItem_Buysth);
 	    menuItem_Buysth.addActionListener(this);
-	    menu_Buy.add(menuItem_mydiscount);
-	    menuItem_mydiscount.addActionListener(this);
 	    menu_Buy.add(menuItem_Myaddress);
 	    menuItem_Myaddress.addActionListener(this);
+	    menu_Buy.add(menuItem_mydiscount);
+	    menuItem_mydiscount.addActionListener(this);
 	    menu_Buy.add(menuItem_myfullcut);
 	    menuItem_myfullcut.addActionListener(this);
+	    menu_Buy.add(menuItem_myorder);
+	    menuItem_myorder.addActionListener(this);
 	    menubar.add(menu_Buy);
 		} 
 		menu_search.add(this.menuItem_UserPerchaseSearch);
@@ -102,7 +108,7 @@ public class FrmAdminMain extends JFrame implements ActionListener {
 	    this.setJMenuBar(menubar);
 	    //鐘舵�佹爮
 	    statusBar.setLayout(new FlowLayout(FlowLayout.LEFT));
-	    JLabel label=new JLabel("你好!");
+	    JLabel label=new JLabel("客官你好,近日阴雨连绵,来单热的驱驱尸气~");
 	    statusBar.add(label);
 	    this.getContentPane().add(statusBar,BorderLayout.SOUTH);
 	    this.addWindowListener(new WindowAdapter(){   
@@ -160,6 +166,12 @@ public class FrmAdminMain extends JFrame implements ActionListener {
 		}else if (e.getSource()==this.menuItem_shopCart) {
 			FrmShoppingCartManager fscm = new FrmShoppingCartManager(this, "我的购物车", true);
 			fscm.setVisible(true);
+		}else if (e.getSource() == this.menuItem_KnightDistribute) {
+			FrmKnightDstbt fkd = new FrmKnightDstbt(this, "骑手分配", true);
+			fkd.setVisible(true);
+		}else if (e.getSource() == this.menuItem_myorder) {
+			FrmMyOrderManager fkd = new FrmMyOrderManager(this, "我的订单", true);
+			fkd.setVisible(true);
 		}
 	}
 }

@@ -64,7 +64,7 @@ public class DiscountManager implements ItfDiscountManager{
 				p.setBusi_id(rs.getString(2));
 				p.setDiscount_value(rs.getDouble(3));
 				p.setDiscount_collect(rs.getInt(4));
-				p.setDiscount_end(rs.getDate(6));
+				p.setDiscount_end(rs.getTimestamp(6));
 				result.add(p);
 				
 			}
@@ -99,7 +99,7 @@ public class DiscountManager implements ItfDiscountManager{
 			pst.setDouble(1, p.getDiscount_value());
 			pst.setInt(2, p.getDiscount_collect());
 			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
-			pst.setDate(3,(Date) p.getDiscount_end());
+			pst.setTimestamp(3, (new java.sql.Timestamp(p.getDiscount_end().getTime())));
 			pst.setString(4, p.getDiscount_id());
 			pst.executeUpdate();
 			pst.close();
@@ -140,7 +140,7 @@ public class DiscountManager implements ItfDiscountManager{
 			pst.setDouble(3, p.getDiscount_value());
 			pst.setInt(4, p.getDiscount_collect());
 			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
-			pst.setDate(5,(Date) p.getDiscount_end());
+			pst.setTimestamp(5, (new java.sql.Timestamp(p.getDiscount_end().getTime())));
 			pst.execute();
 			pst.close();
 		} catch(SQLException e) {
@@ -172,7 +172,7 @@ public class DiscountManager implements ItfDiscountManager{
 				p.setBusi_id(rs.getString(2));
 				p.setDiscount_value(rs.getDouble(3));
 				p.setDiscount_collect(rs.getInt(4));
-				p.setDiscount_end(rs.getDate(6));
+				p.setDiscount_end(rs.getTimestamp(6));
 				result.add(p);
 				
 			}

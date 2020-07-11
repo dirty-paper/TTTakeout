@@ -15,7 +15,38 @@ import util.DBUtil;
 import util.DbException;
 
 public class KnightManager implements ItfKnightManager{
-
+	public ArrayList<BeanKnight_info> loadallfreeKnight() throws BaseException{
+		ArrayList<BeanKnight_info> result = new ArrayList<BeanKnight_info>();
+		Connection conn = null;
+		String sql = "select * from knight_info where knight_status = '空闲'";
+		PreparedStatement pst = null;
+		try {
+			conn = DBUtil.getConnection();
+			pst = conn.prepareStatement(sql);
+			ResultSet rs = pst.executeQuery();
+			while (rs.next()) {
+				BeanKnight_info p = new BeanKnight_info();
+				p.setKnight_name(rs.getString(2));
+				p.setKnight_id(rs.getString(1));
+				p.setKnight_level(rs.getString(4));
+				p.setKnight_join(rs.getDate(3));
+				result.add(p);
+				
+			}
+		} catch (SQLException e) {
+			// TODO: handle exception
+			e.printStackTrace();
+			throw new DbException(e);
+		}finally {
+			if(conn!=null)
+				try {
+				conn.close();
+			} catch(SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		return result;
+	}
 	@Override
 	public ArrayList<BeanKnight_info> loadallKnight() throws BaseException {
 		// TODO Auto-generated method stub
@@ -73,7 +104,7 @@ public class KnightManager implements ItfKnightManager{
 				pst.close();
 				throw new BusinessException("该骑手id已经存在");
 			}
-			sql = "insert into knight_info values(?,?,now(),'新人')";
+			sql = "insert into knight_info values(?,?,now(),'新人','空闲')";
 			pst = conn.prepareStatement(sql);
 			pst.setString(1, p.getKnight_id());
 			pst.setString(2,p.getKnight_name());

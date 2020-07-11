@@ -9,5 +9,6 @@ import util.DbException;
 
 public interface ItfFullcut_own {
 	public void FullcutGet(BeanBusi_fullcut p) throws BaseException;
-	public ArrayList<BeanFullcut_own> loadfullcutmine() throws DbException;
+	public ArrayList<BeanFullcut_own> loadfullcutmine() throws BaseException;
+	public void usefullcut(BeanFullcut_own p) throws BaseException;
 }

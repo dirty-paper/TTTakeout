@@ -16,6 +16,9 @@ import util.BusinessException;
 import util.DBUtil;
 import util.DbException;
 import java.sql.*;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+
 import util.*;
 public class ShoppingCartManager implements ItfShoppingCartManager{
 
@@ -26,7 +29,8 @@ public class ShoppingCartManager implements ItfShoppingCartManager{
 		java.sql.Connection conn = null;
 		PreparedStatement pst = null;
 		PreparedStatement pst1 = null;
-		String sql = "select * from shoppingcart where usr_id = ? and product_id = ?";
+		String sql = "select product_count,product_remain from shoppingcart,busi_product where usr_id = ? \r\n" + 
+				"and shoppingcart.product_id = ? and shoppingcart.product_id = busi_product.product_id";
 		try {
 			conn = DBUtil.getConnection();
 			pst = conn.prepareStatement(sql);
@@ -34,6 +38,9 @@ public class ShoppingCartManager implements ItfShoppingCartManager{
 			pst.setString(2, p.getProduct_id());
 			ResultSet rs = pst.executeQuery();
 			if (rs.next()) {
+				if (rs.getInt(1) + i > rs.getInt(2)) {
+					throw new BusinessException("您购物车内的此商品已超出店家承受能力了噢~");
+				}
 				sql = "update shoppingcart set product_count = product_count + ? where usr_id = ? and product_id = ?";
 				pst1 = conn.prepareStatement(sql);
 				pst1.setInt(1, i);
@@ -153,9 +160,9 @@ public class ShoppingCartManager implements ItfShoppingCartManager{
 		java.sql.Connection conn = null;
 		PreparedStatement pst = null;
 		BeanFullcut_own p = new BeanFullcut_own();
-		String sql = "SELECT fullcut_id,cutvalue from fullcut_own where cutvalue in(\r\n" + 
-				"	SELECT max(cutvalue) FROM fullcut_own where needvalue <? \r\n" + 
-				") and usr_id = ?";
+		String sql = "SELECT fullcut_id,cutvalue from fullcut_own where cutvalue =(\r\n" + 
+				"				SELECT max(cutvalue) FROM fullcut_own where needvalue < ?\r\n" + 
+				"				and usr_id = ? and ifused = 0) ";
 		try {
 			conn = DBUtil.getConnection();
 			pst = conn.prepareStatement(sql);
@@ -191,8 +198,140 @@ public class ShoppingCartManager implements ItfShoppingCartManager{
 	}
 	@Override
 	public void settle(ArrayList<BeanShoppingCart> p, BeanUser_address a,BeanDiscount_own discount, 
-			BeanFullcut_own fullcut, double total,String rqtime)throws BaseException {
+			BeanFullcut_own fullcut, double total,double after,String rqtime)throws BaseException {
 			// TODO Auto-generated method stub
+		Connection conn = null;
+		PreparedStatement pst = null;
+		String sql = "insert into busi_order(discount_id,fullcut_id,usr_id,add_id,busi_id,order_oprc,order_fprc,"
+				+ "order_time,order_rqtime,order_status) values(?,?,?,?,?,?,?,now(),?,?)";
+		try {
+			conn = DBUtil.getConnection();
+			pst = conn.prepareStatement(sql);
+			if (discount==null) pst.setString(1, null);
+			else pst.setString(1, discount.getDiscount_id());
+			if (fullcut==null) pst.setString(2, null);
+			else pst.setString(2, fullcut.getFullcut_id());
+			pst.setString(3, BeanUser_info.currentBeanUser.getUsr_id());
+			pst.setString(4, a.getAdd_id());
+			pst.setString(5, p.get(0).getBusi_id());
+			pst.setDouble(6, total);
+			pst.setDouble(7, after);
+			if (rqtime==null||"".equals(rqtime)) {
+				pst.setTimestamp(8, new java.sql.Timestamp(System.currentTimeMillis()+3600000L));
+			}else {
+				SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+				pst.setTimestamp(8, new java.sql.Timestamp(sdf.parse(rqtime).getTime()));
+			}	
+			pst.setString(9, "等待骑手");
+			pst.execute();
+			pst.close();
+			sql = "select max(order_id) from busi_order";
+			pst = conn.prepareStatement(sql);
+			ResultSet rs = pst.executeQuery();
+			int id = 0;
+			while (rs.next()) {
+				id = rs.getInt(1);
+				break;
+			}
+			rs.close();
+			pst.close();
+			sql = "insert into order_detail(product_id,order_id,product_count,price) values(?,?,?,?)";
+			for (int i = 0; i <p.size(); i++) {
+				pst = conn.prepareStatement(sql);
+				pst.setString(1, p.get(i).getProduct_id());
+				pst.setInt(2, id);
+				pst.setInt(3, p.get(i).getProduct_count());
+				pst.setDouble(4, p.get(i).getProduct_price());
+				pst.execute();
+				pst.close();
+			}
+		}catch (SQLException | ParseException e) {
+			// TODO: handle exception
+			e.printStackTrace();
+		}finally {
+			if(conn!=null)
+				try {
+				conn.close();
+			} catch(SQLException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+
+	@Override
+	public BeanDiscount_own getDiscount(double total,ArrayList<BeanShoppingCart> p) throws BaseException {
+		// TODO Auto-generated method stub
+		java.sql.Connection conn = null;
+		PreparedStatement pst = null;
+		String sql = "SELECT discount_value,discount_id from discount_own where usr_id = ? and ifused = 0 "
+				+ "and busi_id = ?\r\n" + 
+				"and discount_collect<= all(\r\n" + 
+				"	SELECT count(*) from busi_order where usr_id =? and busi_id = ?\r\n" + 
+				")";
+		try {
+			conn = DBUtil.getConnection();
+			pst = conn.prepareStatement(sql);
+			pst.setString(1, BeanUser_info.currentBeanUser.getUsr_id());
+			pst.setString(2, p.get(0).getBusi_id());
+			pst.setString(3, BeanUser_info.currentBeanUser.getUsr_id());
+			pst.setString(4, p.get(0).getBusi_id());
+			ResultSet rs = pst.executeQuery();
+			if (rs.next()) {
+				BeanDiscount_own bdco = new BeanDiscount_own();
+				bdco.setDiscount_id(rs.getString(2));
+				bdco.setDiscount_value(rs.getDouble(1));
+				pst.close();
+				rs.close();
+				return bdco;
+			}else {
+				pst.close();
+				rs.close();
+				return null;
+			}
+		} catch (Exception e) {
+			// TODO: handle exception
+			e.printStackTrace();
+			throw new DbException(e);
+		}finally {
+			if(conn!=null)
+				try {
+				conn.close();
+			} catch(SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		
+	}
+
+	@Override
+	public void checkifother(BeanBusi_info p) throws BaseException {
+		// TODO Auto-generated method stub
+		java.sql.Connection conn = null;
+		PreparedStatement pst = null;
+		String sql = "select busi_id from shoppingcart";
+		try {
+			conn = DBUtil.getConnection();
+			pst = conn.prepareStatement(sql);
+			ResultSet rs = pst.executeQuery();
+			while (rs.next())
+			if (rs.getString(1).equals(p.getBusi_id())) {
+				return;
+			}else {
+				throw new BusinessException("购物车内有其他商家的商品，请先结算或清空完噢~");
+			}
+			
+		} catch (SQLException e) {
+			// TODO: handle exception
+			e.printStackTrace();
+			throw new DbException(e);
+		}finally {
+			if(conn!=null)
+				try {
+				conn.close();
+			} catch(SQLException e) {
+				e.printStackTrace();
+			}
+		}
 		
 	}
 	

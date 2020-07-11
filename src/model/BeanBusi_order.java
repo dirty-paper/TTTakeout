@@ -1,9 +1,9 @@
 package model;
 
-import java.sql.Date;
+import java.util.*;
 
 public class BeanBusi_order {
-	private String order_id;
+	private int order_id;
 	private String discount_id;
 	private String fullcut_id;
 	private String usr_id;
@@ -14,12 +14,7 @@ public class BeanBusi_order {
 	private double order_fprc;
 	private Date order_time;
 	private Date order_rqtime;
-	public String getOrder_id() {
-		return order_id;
-	}
-	public void setOrder_id(String order_id) {
-		this.order_id = order_id;
-	}
+	private String order_status;
 	public String getDiscount_id() {
 		return discount_id;
 	}
@@ -71,14 +66,26 @@ public class BeanBusi_order {
 	public Date getOrder_time() {
 		return order_time;
 	}
-	public void setOrder_time(Date order_time) {
-		this.order_time = order_time;
+	public void setOrder_time(java.util.Date date) {
+		this.order_time = date;
 	}
 	public Date getOrder_rqtime() {
 		return order_rqtime;
 	}
 	public void setOrder_rqtime(Date order_rqtime) {
 		this.order_rqtime = order_rqtime;
+	}
+	public int getOrder_id() {
+		return order_id;
+	}
+	public void setOrder_id(int order_id) {
+		this.order_id = order_id;
+	}
+	public String getOrder_status() {
+		return order_status;
+	}
+	public void setOrder_status(String order_status) {
+		this.order_status = order_status;
 	}
 	
 }

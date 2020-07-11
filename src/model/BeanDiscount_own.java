@@ -9,6 +9,7 @@ public class BeanDiscount_own {
 	private double discount_value;
 	private Date discount_end;
 	private String busi_id;
+	private int discount_collect;
 	public String getDiscount_id() {
 		return discount_id;
 	}
@@ -44,6 +45,12 @@ public class BeanDiscount_own {
 	}
 	public void setBusi_id(String busi_id) {
 		this.busi_id = busi_id;
+	}
+	public int getDiscount_collect() {
+		return discount_collect;
+	}
+	public void setDiscount_collect(int discount_collect) {
+		this.discount_collect = discount_collect;
 	}
 	
 }

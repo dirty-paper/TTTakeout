@@ -5,6 +5,9 @@ import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.Date;
+import java.sql.Timestamp;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 
 import javax.swing.JButton;
 import javax.swing.JDialog;
@@ -86,13 +89,19 @@ public class FrmDiscountManagerAdd extends JDialog implements ActionListener{
 			String id = this.edtId.getText();
 			double value = Double.valueOf(this.edtValue.getText());
 			int need = Integer.valueOf(this.edtNeed.getText());
-			Date date = Date.valueOf(this.edtddl.getText());
+			String date = this.edtddl.getText();
+			java.text.SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 			BeanBusi_discount bd = new BeanBusi_discount();
 			bd.setBusi_id(BeanBusi_info.currentBusiness.getBusi_id());
 			bd.setDiscount_id(id);
 			bd.setDiscount_value(value);
 			bd.setDiscount_collect(need);
-			bd.setDiscount_end(date);
+			try {
+				bd.setDiscount_end(new java.sql.Timestamp(sdf.parse(date).getTime()));
+			} catch (ParseException e2) {
+				// TODO Auto-generated catch block
+				e2.printStackTrace();
+			}
 			try {
 				TakeOututil.discountManager.DiscountAdd(bd);
 				this.setVisible(false);
